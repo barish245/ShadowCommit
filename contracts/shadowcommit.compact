@@ -1,0 +1,112 @@
+pragma language_version >= 0.22;
+
+import CompactStandardLibrary;
+
+// ── PUBLIC LEDGER STATE ──
+// All values here are visible to every observer on the Midnight blockchain.
+export ledger oracle_credentials: MerkleTree<16, Bytes<32>>;  // Oracle's tree of valid developer credentials
+export ledger admin: Bytes<32>;               // persistentHash of admin secret key
+export ledger bounties: Map<Bytes<32>, Uint<32>>;  // bounty_id → minimum reputation score
+export ledger claimed: Set<Bytes<32>>;        // nullifiers — prevents double-claiming
+export ledger total_claims: Uint<32>;         // global counter of successful claims
+export ledger is_active: Boolean;             // pause switch for emergencies
+
+// ── PRIVATE DATA STRUCTURES ──
+struct DevCredential {
+    dev_id: Bytes<32>,           // hashed GitHub user ID (never disclosed)
+    score: Uint<32>              // reputation score — commits, stars, etc. (never disclosed)
+}
+
+// ── WITNESSES (Private — NEVER goes on-chain) ──
+witness dev_credential(): DevCredential;
+witness admin_secret(): Bytes<32>;
+witness find_credential_path(commitment: Bytes<32>): MerkleTreePath<16, Bytes<32>>;
+
+// ── CONSTRUCTOR (called ONCE at deploy time) ──
+constructor(admin_hash: Bytes<32>) {
+    admin = disclose(admin_hash);
+    total_claims = disclose(0);
+    is_active = disclose(true);
+}
+
+// ── CIRCUIT: issue_credential (admin/oracle only) ──
+// The oracle issues a credential by inserting the commitment into the Merkle Tree.
+// This is completely anonymous; observers only see a random 32-byte hash added to the tree.
+export circuit issue_credential(commitment: Bytes<32>): [] {
+    assert(disclose(is_active), "Protocol paused");
+    const sk = admin_secret();
+    assert(admin == admin_public_key(sk), "Not authorized");
+    oracle_credentials.insert(disclose(commitment));
+}
+
+// ── CIRCUIT: claim_bounty ──
+// Developer proves: (1) credential is in oracle's tree, (2) score meets threshold, (3) no double-claim.
+// Privacy: observer sees ONLY that someone claimed bounty X. NOT who, NOT their score.
+export circuit claim_bounty(bounty_id: Bytes<32>): [] {
+    assert(disclose(is_active), "Protocol paused");
+
+    // 1. Read private credential from witness
+    const cred = dev_credential();
+
+    // 2. Verify oracle signed this credential (via Merkle Tree membership)
+    const commitment = make_credential_commitment(cred.dev_id, cred.score);
+    const path = find_credential_path(commitment);
+    
+    assert(
+        oracle_credentials.checkRoot(merkleTreePathRoot<16, Bytes<32>>(path)),
+        "Invalid credential — not attested by oracle"
+    );
+
+    // 3. Verify bounty exists and score meets threshold
+    assert(bounties.member(disclose(bounty_id)), "Bounty does not exist");
+    const required = bounties.lookup(disclose(bounty_id));
+    assert(cred.score >= required, "Score below bounty requirement");
+
+    // 4. Compute nullifier and prevent double-claim
+    const nul = make_nullifier(bounty_id, cred.dev_id);
+    assert(!claimed.member(disclose(nul)), "Already claimed this bounty");
+    claimed.insert(disclose(nul));
+    total_claims = disclose((total_claims + 1) as Uint<32>);
+}
+
+// ── CIRCUIT: add_bounty (admin only) ──
+// Creates a new bounty with a minimum reputation score requirement.
+export circuit add_bounty(bounty_id: Bytes<32>, min_score: Uint<32>): [] {
+    assert(disclose(is_active), "Protocol paused");
+    const sk = admin_secret();
+    assert(admin == admin_public_key(sk), "Not authorized");
+    bounties.insert(disclose(bounty_id), disclose(min_score));
+}
+
+// ── CIRCUIT: update_config (admin only) ──
+// Pause or unpause the protocol.
+export circuit update_config(active: Boolean): [] {
+    const sk = admin_secret();
+    assert(admin == admin_public_key(sk), "Not authorized");
+    is_active = disclose(active);
+}
+
+// ── PURE CIRCUITS (exported for use in TypeScript) ──
+export pure circuit admin_public_key(sk: Bytes<32>): Bytes<32> {
+    return persistentHash<Vector<2, Bytes<32>>>([
+        pad(32, "shadowcommit:admin:v1"), 
+        sk
+    ]);
+}
+
+export pure circuit make_credential_commitment(dev_id: Bytes<32>, score: Uint<32>): Bytes<32> {
+    return persistentHash<Vector<3, Bytes<32>>>([
+        pad(32, "shadowcommit:cred:v1"), 
+        dev_id, 
+        score as Field as Bytes<32>
+    ]);
+}
+
+export pure circuit make_nullifier(bounty_id: Bytes<32>, dev_id: Bytes<32>): Bytes<32> {
+    return persistentHash<Vector<3, Bytes<32>>>([
+        pad(32, "shadowcommit:null:v1"), 
+        bounty_id, 
+        dev_id
+    ]);
+}
+
