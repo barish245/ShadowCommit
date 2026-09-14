@@ -1,0 +1,50 @@
+<svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="scHexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="60%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <linearGradient id="scShieldInner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="scBranchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#00f2fe" />
+    </linearGradient>
+  </defs>
+
+  <polygon
+    points="22,2 40,8 40,24 22,42 4,24 4,8"
+    stroke="url(#scHexGradient)"
+    stroke-width="2.5"
+    stroke-linejoin="round"
+    fill="url(#scShieldInner)"
+  />
+
+  <path
+    d="M17,14 L17,30"
+    stroke="url(#scBranchGrad)"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M17,21 Q21,21 24,17"
+    stroke="url(#scBranchGrad)"
+    stroke-width="2"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <circle cx="17" cy="14" r="2.8" fill="#00f2fe" stroke="#030712" stroke-width="1.5" />
+  <circle cx="26" cy="16" r="2.8" fill="#818cf8" stroke="#030712" stroke-width="1.5" />
+  <circle cx="17" cy="30" r="3.5" fill="#00f2fe" stroke="#030712" stroke-width="1.5" />
+  <circle cx="17" cy="30" r="1.3" fill="#030712" />
+
+  <path
+    d="M31,27 L33.5,31 L28.5,31 Z"
+    fill="#00f2fe"
+    opacity="0.9"
+  />
+</svg>
