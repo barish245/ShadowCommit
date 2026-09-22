@@ -78,3 +78,38 @@ A Compact smart contract on Midnight Network that verifies **private credentials
 │  PRIVATE: dev_id, score, oracle_secret                 │
 └───────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Setup
+
+### Prerequisites
+- Node.js >= 22
+- Yarn 1.22.22
+- Docker Desktop
+- Compact Compiler 0.31.0
+- 1AM Wallet (Chrome extension)
+
+### Install & Compile
+
+```bash
+git clone https://github.com/barish245/ShadowCommit.git
+cd ShadowCommit
+yarn install
+yarn compile
+```
+
+### Local Development
+
+```bash
+# Start the local Midnight network (Docker)
+yarn env:up
+
+# Wait for DUST tokens to accrue
+npx vite-node scripts/wait-for-dust.ts
+
+# Run tests
+yarn test:local
+
+# Start frontend
+cd frontend
