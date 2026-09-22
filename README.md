@@ -40,3 +40,41 @@ ShadowCommit decouples **developer reputation** from **identity**. It lets devel
 A Compact smart contract on Midnight Network that verifies **private credentials** using zero-knowledge proofs. Developers prove they meet a bounty's requirements without revealing who they are.
 
 ---
+
+## Privacy Model
+
+| Observer CAN see | Observer CANNOT see |
+|---|---|
+| That *someone* claimed a bounty | Who the developer is (GitHub ID) |
+| Total number of claims | The developer's actual reputation score |
+| Bounty IDs and score thresholds | The oracle's secret key |
+| Anonymous nullifier hashes | The link between wallet and GitHub identity |
+| That the protocol is active/paused | Whether the same person claimed different bounties |
+
+---
+
+## Architecture
+
+```
+┌───────────────────────────────────────────────────────┐
+│                     Developer                          │
+│  (anonymous 1AM wallet — no link to real identity)    │
+└──────────────────────┬────────────────────────────────┘
+                       │  Private witnesses:
+                       │  - dev_id (hashed GitHub)
+                       │  - score (reputation)
+                       │  - oracle_secret (credential)
+                       ▼
+┌───────────────────────────────────────────────────────┐
+│              ShadowCommit Compact Contract             │
+│                                                        │
+│  1. Verify oracle signed the credential                │
+│  2. Assert score >= bounty threshold                   │
+│  3. Compute nullifier = hash(bounty_id, dev_id)       │
+│  4. Check nullifier not already claimed                │
+│  5. Insert nullifier + increment counter               │
+│                                                        │
+│  PUBLIC: nullifier, total_claims, bounty map           │
+│  PRIVATE: dev_id, score, oracle_secret                 │
+└───────────────────────────────────────────────────────┘
+```
