@@ -113,3 +113,37 @@ yarn test:local
 
 # Start frontend
 cd frontend
+yarn install
+yarn dev
+# Open http://localhost:5173
+```
+
+### Deploy to Preprod
+
+1. Install 1AM wallet and switch to **Preprod**
+2. Get DUST from: https://faucet.preprod.midnight.network/api/drips
+3. Open app at http://localhost:5173
+4. Go to `/admin` → Deploy Contract
+5. Copy the contract address
+
+---
+
+## Contract Circuits
+
+| Circuit | Access | Description |
+|---|---|---|
+| `claim_bounty(bounty_id)` | Public | ZK-prove credential meets bounty threshold |
+| `add_bounty(bounty_id, min_score)` | Admin | Add a new bounty with score requirement |
+| `update_config(active)` | Admin | Pause/unpause the protocol |
+
+---
+
+## Tech Stack
+
+- **Smart Contract**: Compact (Midnight's ZK language)
+- **Frontend**: React 19 + Vite 6 + TypeScript
+- **Wallet**: 1AM Browser Extension
+- **SDK**: @midnight-ntwrk/midnight-js 4.1.1
+- **Testing**: Vitest with local Docker network
+- **CI/CD**: GitHub Actions
+- **Deployment**: Vercel (frontend) + Midnight Preprod (contract)
