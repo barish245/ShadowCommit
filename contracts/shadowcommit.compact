@@ -53,7 +53,7 @@ export circuit claim_bounty(bounty_id: Bytes<32>): [] {
     const path = find_credential_path(commitment);
     
     assert(
-        oracle_credentials.checkRoot(merkleTreePathRoot<16, Bytes<32>>(path)),
+        oracle_credentials.checkRoot(disclose(merkleTreePathRoot<16, Bytes<32>>(path))),
         "Invalid credential — not attested by oracle"
     );
 

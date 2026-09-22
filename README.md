@@ -21,6 +21,7 @@
 | 🔍 **Deployment Transaction** | [View on 1AM Explorer (Preprod)](https://explorer.1am.xyz/tx/3f6a4aef289c86e0870356cd971734889179adb0ca41d8a6837081939d852053?network=preprod) |
 | 💼 **Target Wallet** | [1AM Browser Extension](https://1am.xyz) (Midnight Testnet/Preprod) |
 | 🐙 **Source Repository** | [https://github.com/barish245/ShadowCommit](https://github.com/barish245/ShadowCommit) |
+| 🐦 **Announcement on X** | [View Post on X](https://x.com/shadowcommitmid/status/2102497952103322068?s=20) |
 
 ---
 
@@ -294,14 +295,14 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser with the
 
 ---
 
-## 🛡️ Hackathon Submission Details
+## 🛡️ Project Links & Details
 
-- **Event**: Midnight Network Hackathon — September 2026
 - **Track**: Dev Tooling / Privacy-Preserving Applications
 - **Author**: **[barish245](https://github.com/barish245)**
 - **GitHub Repository**: [https://github.com/barish245/ShadowCommit](https://github.com/barish245/ShadowCommit)
 - **Live dApp URL**: [https://shadowcommit.netlify.app/](https://shadowcommit.netlify.app/)
 - **Demo Video Walkthrough**: [Google Drive Link](https://drive.google.com/file/d/10Pvgt_9Hp61vneGx4GJh6fzv9B3uo1vW/view?usp=sharing)
+- **Announcement on X**: [https://x.com/shadowcommitmid/status/2102497952103322068](https://x.com/shadowcommitmid/status/2102497952103322068?s=20)
 
 ---
 
