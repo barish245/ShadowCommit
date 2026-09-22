@@ -147,3 +147,32 @@ yarn dev
 - **Testing**: Vitest with local Docker network
 - **CI/CD**: GitHub Actions
 - **Deployment**: Vercel (frontend) + Midnight Preprod (contract)
+
+---
+
+## Project Structure
+
+```
+ShadowCommit/
+├── contracts/
+│   ├── shadowcommit.compact       ← The ZK smart contract
+│   ├── index.ts                   ← TypeScript bindings
+│   └── managed/                   ← Auto-generated (never edit)
+├── frontend/
+│   ├── src/
+│   │   ├── lib/midnight.ts        ← Core SDK utilities
+│   │   ├── contexts/WalletContext  ← Wallet state management
+│   │   └── pages/                 ← Admin + Developer UI
+│   └── public/managed/            ← ZK proving keys
+├── src/
+│   ├── config.ts                  ← Network configs
+│   ├── providers.ts               ← Five Provider Pattern
+│   └── test/                      ← Vitest test suite
+├── scripts/wait-for-dust.ts       ← DUST accrual script
+├── compose.yml                    ← Local Docker network
+└── .github/workflows/ci.yaml      ← CI pipeline
+```
+
+---
+
+*Built by [barish245](https://github.com/barish245) for the Midnight Network Hackathon, September 2026.*
