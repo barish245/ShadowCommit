@@ -7,7 +7,7 @@
 ## Live Demo & Video
 
 - **Demo Video**: [Watch Full Demo Video (Google Drive)](https://drive.google.com/file/d/10Pvgt_9Hp61vneGx4GJh6fzv9B3uo1vW/view?usp=sharing)
-- **App**: _Coming soon_ <!-- https://shadowcommit.vercel.app -->
+- **Live dApp**: https://shadowcommit.netlify.app/
 - **Contract (Preprod)**: `c3a77cb03c27e0a9d119b14238497db9169ad3860e9ae2815b263021e3ddff5d`
 - **Explorer**: https://explorer.1am.xyz/contract/c3a77cb03c27e0a9d119b14238497db9169ad3860e9ae2815b263021e3ddff5d
 - **Deployment Tx**: https://explorer.1am.xyz/tx/3f6a4aef289c86e0870356cd971734889179adb0ca41d8a6837081939d852053?network=preprod
@@ -146,7 +146,7 @@ yarn dev
 - **SDK**: @midnight-ntwrk/midnight-js 4.1.1
 - **Testing**: Vitest with local Docker network
 - **CI/CD**: GitHub Actions
-- **Deployment**: Vercel (frontend) + Midnight Preprod (contract)
+- **Deployment**: Netlify (frontend) + Midnight Preprod (contract)
 
 ---
 
